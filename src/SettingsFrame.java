@@ -27,13 +27,21 @@ public class SettingsFrame extends JFrame implements GameConstants {
     private class SettingsPanel extends JPanel {
 
         private JComboBox<Difficulty> difficultySelector = new JComboBox<>(Difficulty.values());
-        private JComboBox<String> backgroundSelector = new JComboBox<>();
+        private JComboBox<String> backgroundSelector = new JComboBox<>(makeBackgroundStrings());
         private JCheckBox playerSwitch = new JCheckBox();
 
         SettingsPanel() {
             setLayout(new GridLayout(3, 2, 0, 5));
             setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
             init();
+        }
+
+        private String[] makeBackgroundStrings() {
+            String[] backgroundStrings = new String[globalBackgrounds.size()];
+            for (int i = 0; i < backgroundStrings.length; i++) {
+                backgroundStrings[i] = "Background " + (i+1);
+            }
+            return backgroundStrings;
         }
 
         private void init() {

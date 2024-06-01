@@ -1,6 +1,3 @@
-import java.util.Date;
-import java.util.Random;
-
 public class GameVariables  {
     // Preferences
     static int currentBackgroundModelIndex = 0;
@@ -14,7 +11,7 @@ public class GameVariables  {
     // Invader Movement
     static final int INVADER_SPEED = 1;
     static Thread enemiesShootingThread = new Thread();
-    static int shootingDelayInSeconds = 2; 
+    static int shootingDelayInSeconds = getShootingDelay(gameDifficulty); 
     // Speed Setter
     private static int getGameSpeed(Difficulty difficulty) {
         switch (difficulty) {
@@ -31,5 +28,18 @@ public class GameVariables  {
         }
     }
 
-
+    private static int getShootingDelay(Difficulty difficulty) {
+        switch (difficulty) {
+            case EASY:
+                return 4;
+            case MEDIUM:
+                return 2;
+            case HARD:
+                return 1;
+            case INSANE:
+                return 2;
+            default:
+                return 2;
+        }
+    }
 }

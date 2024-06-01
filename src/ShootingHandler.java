@@ -8,7 +8,7 @@ public class ShootingHandler implements GameConstants {
     private final Timer timer = new Timer();
     private TimerTask timerTask = createTimerTask();
     ShootingHandler() {
-        timer.schedule(timerTask, 20);
+        timer.scheduleAtFixedRate(timerTask, 10, GameVariables.shootingDelayInSeconds * 1000);
     }
 
 

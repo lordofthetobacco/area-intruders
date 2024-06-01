@@ -7,7 +7,6 @@ public class ControlBar extends JToolBar implements Runnable, GameConstants {
     JButton left = new JButton("<");
     JButton fire = new JButton("Fire");
     JButton right = new JButton(">");
-    Score scoreLabel = new Score();
 
     ControlBar() {
         left.setFocusable(false);
@@ -19,7 +18,6 @@ public class ControlBar extends JToolBar implements Runnable, GameConstants {
         add(left);
         add(fire);
         add(right);
-        add(scoreLabel, BorderLayout.WEST);
         new Thread(this).start();
     }
 

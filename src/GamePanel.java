@@ -16,7 +16,8 @@ public class GamePanel extends JPanel implements GameConstants, Runnable {
     private JFrame windowReference;
     private ControlBar controlBarReference;
     private SettingsFrame settingsFrameReference;
-
+    private Score scoreReference;
+    
     private Player player;
     private Image background;
     private Graphics bgGraphics;
@@ -25,10 +26,11 @@ public class GamePanel extends JPanel implements GameConstants, Runnable {
     private Invader firstInvader;
     private Invader lastInvader;
 
-    GamePanel(JFrame windowReference, ControlBar controlBarReference,SettingsFrame settingsFrameReference) {
-        this.windowReference = windowReference;
-        this.controlBarReference = controlBarReference;
-        this.settingsFrameReference = settingsFrameReference;
+    GamePanel(JFrame windowRef, ControlBar controlBarRef, SettingsFrame settingsFrameRef, Score scoreRef) {
+        this.windowReference = windowRef;
+        this.controlBarReference = controlBarRef;
+        this.settingsFrameReference = settingsFrameRef;
+        this.scoreReference = scoreRef;
         setFocusable(true);
         newGame();
         mainThread.start();
@@ -95,6 +97,7 @@ public class GamePanel extends JPanel implements GameConstants, Runnable {
                             lastInvader = globalInvaders.stream().max(Comparator.comparingDouble(Invader::getX)).get();
                             firstInvader = globalInvaders.stream().min(Comparator.comparingDouble(Invader::getX)).get();
                         }
+                        scoreReference.addPoints();
                     }
                 }
             } else {

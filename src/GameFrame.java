@@ -10,13 +10,14 @@ public class GameFrame extends JFrame implements GameConstants {
     private final StreamHandler streamHandler = new StreamHandler();
     private final SettingsFrame settingsWindow = new SettingsFrame();
     private final ControlBar controlBar = new ControlBar();
-    private final GamePanel gamePanel = new GamePanel(this, controlBar, settingsWindow);
+    private final Score score = new Score(this);
+    private final GamePanel gamePanel = new GamePanel(this, controlBar, settingsWindow, score);
 
     GameFrame() {
+
         setBackground(Color.black);
         add(gamePanel);
         add(createMenuBar(), BorderLayout.NORTH);
-        setTitle("Area Intruders");
         setResizable(false);
         setFocusable(true);
         setSize(new Dimension(frameWidth, frameHeight));

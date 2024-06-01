@@ -14,6 +14,7 @@ public class GameVariables  {
     // Invader Movement
     static final int INVADER_SPEED = 1;
     static Thread enemiesShootingThread = new Thread();
+    static int shootingDelayInSeconds = 2; 
     // Speed Setter
     private static int getGameSpeed(Difficulty difficulty) {
         switch (difficulty) {

@@ -7,7 +7,7 @@ public class ControlBar extends JToolBar implements Runnable, GameConstants {
     JButton left = new JButton("<");
     JButton fire = new JButton("Fire");
     JButton right = new JButton(">");
-
+    Thread controlThread;
     ControlBar() {
         left.setFocusable(false);
         right.setFocusable(false);
@@ -18,7 +18,17 @@ public class ControlBar extends JToolBar implements Runnable, GameConstants {
         add(left);
         add(fire);
         add(right);
-        new Thread(this).start();
+        controlThread = new Thread(this);
+        controlThread.start();
+    }
+
+    public void stop() {
+        controlThread.interrupt();
+    }
+
+    public void restart() {
+        controlThread = new Thread(this);
+        controlThread.start();
     }
 
     public void getKeyPressed(KeyEvent e) {

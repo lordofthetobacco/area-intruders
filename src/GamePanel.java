@@ -79,6 +79,7 @@ public class GamePanel extends JPanel implements GameConstants, Runnable {
         while (missileIterator.hasNext()) {
            if (player.intersects(missileIterator.next())) {
                 mainThread.interrupt();
+                controlBarReference.stop();
            } 
         }
     }
@@ -121,6 +122,7 @@ public class GamePanel extends JPanel implements GameConstants, Runnable {
         while (invaderIterator.hasNext()) {
             if (player.intersects(invaderIterator.next())) {
                 mainThread.interrupt();
+                controlBarReference.stop();
             }
         }
     }
@@ -130,7 +132,7 @@ public class GamePanel extends JPanel implements GameConstants, Runnable {
             try{
                 mainThread.wait();
             } catch (Exception e) {
-                return;
+
             }
         }
     }
@@ -211,6 +213,7 @@ public class GamePanel extends JPanel implements GameConstants, Runnable {
             newEnemies();
             mainThread = new Thread(this);
             mainThread.start();
+            controlBarReference.restart();
         }
         if (returnCode == 1) {
             windowReference.dispose();

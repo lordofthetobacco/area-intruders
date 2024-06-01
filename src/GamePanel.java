@@ -207,6 +207,7 @@ public class GamePanel extends JPanel implements GameConstants, Runnable {
         int returnCode = JOptionPane.showOptionDialog(this, "Game Over", "Game has ended", JOptionPane.DEFAULT_OPTION,
                 JOptionPane.WARNING_MESSAGE, null, options, options[0]);
         if (returnCode == 0) {
+            scoreboardReference.newScore();
             globalInvaders.clear();
             globalInvaderMissiles.clear();
             globalMissiles.clear();
@@ -218,6 +219,7 @@ public class GamePanel extends JPanel implements GameConstants, Runnable {
             controlBarReference.restart();
         }
         if (returnCode == 1) {
+            scoreboardReference.newScore();
             windowReference.dispose();
         }
     }

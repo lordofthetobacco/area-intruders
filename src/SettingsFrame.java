@@ -52,6 +52,9 @@ public class SettingsFrame extends JFrame implements GameConstants {
             add(playerSwitch);
             add(new JLabel("Background"));
             add(backgroundSelector);
+            difficultySelector.setSelectedItem(GameVariables.gameDifficulty);
+            playerSwitch.getModel().setSelected(GameVariables.fancyPlayer);
+            backgroundSelector.setSelectedIndex(GameVariables.currentBackgroundModelIndex);
         }
 
         public Difficulty getNewDifficulty() {

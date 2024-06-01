@@ -34,10 +34,8 @@ public class StreamHandler implements GameConstants {
     private void loadBackgroundsFromDirectory() throws IOException {
         DirectoryStream<Path> dirStream = Files.newDirectoryStream(Paths.get(assetPath, "backgrounds"));
         for (Path imagePath : dirStream) {
-            System.out.println(imagePath.toAbsolutePath());
-            if (checkIfImage(imagePath.toString())) {
-                globalBackgrounds.add(ImageIO.read(imagePath.toFile()));
-            }
+            System.out.println(imagePath.toString());
+                globalBackgrounds.add(imagePath.toFile().toString());
         }
         dirStream.close();
     }

@@ -26,7 +26,7 @@ public interface GameConstants {
     // Object Arrays
     ArrayList<Missile> globalMissiles = new ArrayList<>();
     ArrayList<InvaderMissile> globalInvaderMissiles = new ArrayList<>();
-    ArrayList<Image> globalBackgrounds = new ArrayList<>();
+    ArrayList<String> globalBackgrounds = new ArrayList<>();
     ArrayList<Invader> globalInvaders = new ArrayList<>();
     
     // Thread Array

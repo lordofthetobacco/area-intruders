@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Comparator;
@@ -52,10 +53,10 @@ public class GamePanel extends JPanel implements GameConstants, Runnable {
     private void spawnPlayer() {
         player = new Player((frameWidth / 2) - playerWidth, frameHeight - playerHeight - toolbarHeight - menubarHeight, playerWidth, playerHeight);
     }
-    
+
     public void paint(Graphics g) {
         try {
-            background = ImageIO.read(Paths.get("assets", "backgrounds", "bg1.jpg").toFile());
+            background = ImageIO.read(new File(globalBackgrounds.get(GameVariables.currentBackgroundModelIndex)));
         } catch (IOException e) {
             background = createImage(getWidth(), getHeight());
         }

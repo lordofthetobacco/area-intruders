@@ -4,13 +4,15 @@ import javax.swing.*;
 
 public class Score extends JLabel implements GameConstants, Runnable {
 
+    public Thread scoreThread = new Thread(this);
+    
     private static int currentScore;
-
+    
     Score() {
         currentScore = 100;
         setText("Score: " + currentScore);
         setLayout(new FlowLayout(FlowLayout.CENTER));
-        setSize(new Dimension(frameWidth, TOOLBAR_HEIGHT));
+        setSize(new Dimension(frameWidth, toolbarHeight));
         currentScore = 100;
     }
 

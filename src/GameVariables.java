@@ -1,16 +1,19 @@
-public class GameVariables {
+import java.util.Date;
+import java.util.Random;
+
+public class GameVariables  {
     // Preferences
-    static int CURRENT_BACKGROUND_MODEL_INDEX = 0;
-    static boolean FANCY_PLAYER = true;
-    static Difficulty DIFFICULTY = Difficulty.MEDIUM;
-    static int gameSpeed = getGameSpeed(DIFFICULTY);
+    static int currentBackgroundModelIndex = 0;
+    static boolean fancyPlayer = true;
+    static Difficulty gameDifficulty = Difficulty.MEDIUM;
+    static int gameSpeed = getGameSpeed(gameDifficulty);
     // Player Movement
-    static int MOVEMENT_AMOUNT = 0;
-    static int PLAYER_SPEED = 2;
+    static int movementAmount = 0;
+    static int playerSpeed = 2;
     static boolean fire = false;
     // Invader Movement
     static final int INVADER_SPEED = 1;
-
+    static Thread enemiesShootingThread = new Thread();
     // Speed Setter
     private static int getGameSpeed(Difficulty difficulty) {
         switch (difficulty) {
@@ -26,4 +29,6 @@ public class GameVariables {
                 return 128;
         }
     }
+
+
 }

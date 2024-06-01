@@ -1,7 +1,6 @@
 import java.awt.*;
 
-public class InvaderMissile extends Rectangle implements GameConstants, Runnable {
-
+public class InvaderMissile extends Rectangle implements GameConstants {
     InvaderMissile(int x, int y) {
         super(x, y, missileWidth, missileHeight);
     }
@@ -11,23 +10,7 @@ public class InvaderMissile extends Rectangle implements GameConstants, Runnable
         g.fillRect(x, y, missileWidth, missileHeight);
     }
 
-    public void travel() {
+    public void move() {
         y += missileSpeed;
-    }
-
-    public void interrupt() {
-        Thread.currentThread().interrupt();
-    }
-
-    @Override
-    public void run() {
-        while (true) {
-            travel();
-            try {
-                Thread.sleep(1000L / 128);
-            } catch (InterruptedException e) {
-                break;
-            }
-        }
     }
 }

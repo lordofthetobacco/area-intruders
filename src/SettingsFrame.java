@@ -12,9 +12,9 @@ public class SettingsFrame extends JFrame implements GameConstants {
         setResizable(false);
         add(settingsPanel);
         saveButton.addActionListener(e -> {
-            GameVariables.DIFFICULTY = settingsPanel.getNewDifficulty();
-            GameVariables.CURRENT_BACKGROUND_MODEL_INDEX = settingsPanel.getNewBackgroundModelIndex();
-            GameVariables.FANCY_PLAYER = settingsPanel.getNewPlayerModelSetting();
+            GameVariables.gameDifficulty = settingsPanel.getNewDifficulty();
+            GameVariables.currentBackgroundModelIndex = settingsPanel.getNewBackgroundModelIndex();
+            GameVariables.fancyPlayer = settingsPanel.getNewPlayerModelSetting();
             toggleVisibility();
         });
         add(saveButton, BorderLayout.SOUTH);
@@ -39,8 +39,8 @@ public class SettingsFrame extends JFrame implements GameConstants {
         private void init() {
             add(new JLabel("Difficulty"));
             add(difficultySelector);
-            playerSwitch.setSelected(!GameVariables.FANCY_PLAYER);
-            add(new JLabel("Simple player model"));
+            playerSwitch.setSelected(!GameVariables.fancyPlayer);
+            add(new JLabel("Fancy player model"));
             add(playerSwitch);
             add(new JLabel("Background"));
             add(backgroundSelector);

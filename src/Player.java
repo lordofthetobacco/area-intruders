@@ -3,28 +3,31 @@ import java.awt.*;
 public class Player extends Rectangle implements GameConstants, Runnable {
 
     private Image playerModel = new StreamHandler().loadPlayerModel();
-    private Thread currentThread = new Thread(this);
+    public Thread playerThread = new Thread(this);
 
     Player(int x, int y, int width, int height) {
         super(x, y, width, height);
         if (playerModel != null) {
             playerModel = playerModel.getScaledInstance(playerWidth, playerHeight, Image.SCALE_DEFAULT);
         }
-        currentThread.start();
+        playerThread.start();
     }
 
     public void move() {
-        x += GameVariables.MOVEMENT_AMOUNT;
+        x += GameVariables.movementAmount;
+        if (GameVariables.fire) {
+            fire();
+        }
     }
 
-    public void fire() {
-        if (globalMissiles.isEmpty() && GameVariables.fire) {
+    private void fire() {
+        if (globalMissiles.isEmpty()) {
             globalMissiles.add(new Missile(x + (playerWidth / 2) + (missileWidth), y - (playerHeight / 2)));
         }
     }
 
     public void draw(Graphics g) {
-        if (GameVariables.FANCY_PLAYER && playerModel != null) {
+        if (GameVariables.fancyPlayer && playerModel != null) {
             g.drawImage(playerModel, x, y, null);
         } else {
             g.setColor(Color.GREEN);

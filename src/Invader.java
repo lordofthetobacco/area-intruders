@@ -1,4 +1,6 @@
 import java.awt.*;
+import java.util.Date;
+import java.util.Random;
 
 public class Invader extends Rectangle implements GameConstants {
 
@@ -17,11 +19,11 @@ public class Invader extends Rectangle implements GameConstants {
     }
 
     public void shoot() {
-        globalEnemyMissiles.add(new InvaderMissile(x + (playerWidth / 2), y + missileWidth));
+        globalInvaderMissiles.add(new InvaderMissile(x + (invaderSize / 2), y + missileWidth));
     }
 
     public void draw(Graphics g) {
         g.setColor(Color.MAGENTA);
         g.fillRect(x, y, width, height);
-    }
+    } 
 }

@@ -9,10 +9,11 @@ public class GameFrame extends JFrame implements GameConstants {
 
     private final StreamHandler streamHandler = new StreamHandler();
     private final SettingsFrame settingsWindow = new SettingsFrame();
-    private final GamePanel gamePanel = new GamePanel(this);
     private final ControlBar controlBar = new ControlBar();
+    private final GamePanel gamePanel = new GamePanel(this, controlBar, settingsWindow);
 
     GameFrame() {
+        setBackground(Color.black);
         add(gamePanel);
         add(createMenuBar(), BorderLayout.NORTH);
         setTitle("Area Intruders");
@@ -49,7 +50,7 @@ public class GameFrame extends JFrame implements GameConstants {
         gameMenu.add(rankButton);
 
         output.add(gameMenu);
-        output.setSize(new Dimension(getWidth(), MENUBAR_HEIGHT));
+        output.setSize(new Dimension(getWidth(), menubarHeight));
         return output;
     }
 

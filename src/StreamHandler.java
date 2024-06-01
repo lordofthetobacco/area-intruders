@@ -42,9 +42,9 @@ public class StreamHandler implements GameConstants {
 
     public void saveSettings() {
         StringBuilder dataBuilder = new StringBuilder();
-        dataBuilder.append(GameVariables.CURRENT_BACKGROUND_MODEL_INDEX).append("\n");
-        dataBuilder.append(GameVariables.FANCY_PLAYER).append("\n");
-        dataBuilder.append(GameVariables.DIFFICULTY);
+        dataBuilder.append(GameVariables.currentBackgroundModelIndex).append("\n");
+        dataBuilder.append(GameVariables.fancyPlayer).append("\n");
+        dataBuilder.append(GameVariables.gameDifficulty);
         try {
             BufferedWriter writer = Files.newBufferedWriter(Paths.get(savePath, "settings"), Charset.defaultCharset());
             writer.write(dataBuilder.toString());
@@ -89,9 +89,9 @@ public class StreamHandler implements GameConstants {
                 readSettings[c] = line;
                 c++;
             }
-            GameVariables.CURRENT_BACKGROUND_MODEL_INDEX = Integer.parseInt(readSettings[0]);
-            GameVariables.FANCY_PLAYER = Boolean.parseBoolean(readSettings[1]);
-            GameVariables.DIFFICULTY = Difficulty.valueOf(readSettings[2]);
+            GameVariables.currentBackgroundModelIndex = Integer.parseInt(readSettings[0]);
+            GameVariables.fancyPlayer = Boolean.parseBoolean(readSettings[1]);
+            GameVariables.gameDifficulty = Difficulty.valueOf(readSettings[2]);
             reader.close();
         } catch (IOException e) {
             new JOptionPane("No settings save file found.");

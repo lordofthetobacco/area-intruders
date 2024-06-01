@@ -6,9 +6,9 @@ public interface GameConstants {
     // Game Constants
     int frameHeight = 720;
     int frameWidth = (int) (frameHeight * 1.777f);
-    int SPAWN_COUNT_IN_FIRST_ROW = 10;
-    int TOOLBAR_HEIGHT = 35;
-    int MENUBAR_HEIGHT = 35;
+    int spawnCountInFirstRow = 10;
+    int toolbarHeight = 35;
+    int menubarHeight = 35;
 
     // Player Settings
     int playerWidth = 40;
@@ -25,9 +25,12 @@ public interface GameConstants {
 
     // Object Arrays
     ArrayList<Missile> globalMissiles = new ArrayList<>();
-    ArrayList<InvaderMissile> globalEnemyMissiles = new ArrayList<>();
+    ArrayList<InvaderMissile> globalInvaderMissiles = new ArrayList<>();
     ArrayList<Image> globalBackgrounds = new ArrayList<>();
     ArrayList<Invader> globalInvaders = new ArrayList<>();
+    
+    // Thread Array
+    ArrayList<Thread> globalThreads = new ArrayList<>();
 
     // Score Elements
     HashMap<String, Integer> globalScores = new HashMap<>();

@@ -13,7 +13,7 @@ public class ControlBar extends JToolBar implements Runnable, GameConstants {
         left.setFocusable(false);
         right.setFocusable(false);
         fire.setFocusable(false);
-        setSize(new Dimension(getWidth(), TOOLBAR_HEIGHT));
+        setSize(new Dimension(getWidth(), toolbarHeight));
         setFloatable(false);
         setLayout(new FlowLayout(FlowLayout.CENTER));
         add(left);
@@ -31,7 +31,7 @@ public class ControlBar extends JToolBar implements Runnable, GameConstants {
             right.getModel().setPressed(true);
         }
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-            GameVariables.fire = true;
+            fire.getModel().setPressed(true);
         }
     }
 
@@ -43,22 +43,23 @@ public class ControlBar extends JToolBar implements Runnable, GameConstants {
             right.getModel().setPressed(false);
         }
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-            GameVariables.fire = false;
+            fire.getModel().setPressed(false);
         }
     }
 
     public void handleMovement() {
         if (left.getModel().isPressed()) {
-            GameVariables.MOVEMENT_AMOUNT = -GameVariables.PLAYER_SPEED;
+            GameVariables.movementAmount = -GameVariables.playerSpeed;
         }
 
         if (right.getModel().isPressed()) {
-            GameVariables.MOVEMENT_AMOUNT = GameVariables.PLAYER_SPEED;
+            GameVariables.movementAmount = GameVariables.playerSpeed;
         }
 
         if (!left.getModel().isPressed() && !right.getModel().isPressed()) {
-            GameVariables.MOVEMENT_AMOUNT = 0;
+            GameVariables.movementAmount = 0;
         }
+        GameVariables.fire = fire.getModel().isPressed();
     }
 
     @Override

@@ -2,55 +2,53 @@ import java.awt.*;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.Iterator;
+import java.util.Random;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.JOptionPane;
 
 public class GamePanel extends JPanel implements GameConstants, Runnable {
 
     private Thread mainThread = new Thread(this);
+    
     private JFrame windowReference;
+    private ControlBar controlBarReference;
+    private SettingsFrame settingsFrameReference;
+
     private Player player;
     private Image background;
     private Graphics bgGraphics;
-    private int enemiesCountInRow = SPAWN_COUNT_IN_FIRST_ROW;
+    private int enemiesCountInRow = spawnCountInFirstRow;
 
     private Invader firstInvader;
     private Invader lastInvader;
 
-    GamePanel(JFrame windowReference) {
+    GamePanel(JFrame windowReference, ControlBar controlBarReference,SettingsFrame settingsFrameReference) {
         this.windowReference = windowReference;
+        this.controlBarReference = controlBarReference;
+        this.settingsFrameReference = settingsFrameReference;
         setFocusable(true);
         newGame();
+        mainThread.start();
     }
 
     public void pauseGame() {
-        try {
-            mainThread.wait();
-        } catch (InterruptedException e) {
-            return;
-        }
+        
     }
 
     public void resumeGame() {
-        try {
-            mainThread.notify();
-        } catch (Exception e) {
-            return;
-        }
+        
     }
 
     public void newGame() {
         spawnPlayer();
         newEnemies();
-        mainThread.start();
     }
 
     private void spawnPlayer() {
-        player = new Player(
-                (frameWidth / 2) - playerWidth, frameHeight - playerHeight - TOOLBAR_HEIGHT - MENUBAR_HEIGHT,
-                playerWidth, playerHeight);
+        player = new Player((frameWidth / 2) - playerWidth, frameHeight - playerHeight - toolbarHeight - menubarHeight, playerWidth, playerHeight);
     }
     
     public void paint(Graphics g) {
@@ -84,7 +82,6 @@ public class GamePanel extends JPanel implements GameConstants, Runnable {
                     if (missile.intersects(invaderIterator.next())) {
                         missileIterator.remove();
                         invaderIterator.remove();
-                        Score.addPoints();
                         if (globalInvaders.size() > 1) {
                             lastInvader = globalInvaders.stream().max(Comparator.comparingDouble(Invader::getX)).get();
                             firstInvader = globalInvaders.stream().min(Comparator.comparingDouble(Invader::getX)).get();
@@ -115,11 +112,21 @@ public class GamePanel extends JPanel implements GameConstants, Runnable {
         }
     }
 
+    private void checkForSettingsVisible() {
+        if (settingsFrameReference.isVisible()) {
+            try{
+                mainThread.wait();
+            } catch (Exception e) {
+                return;
+            }
+        }
+    }
+
     private void newEnemies() {
         int nextPosX;
         int nextPosY = 0;
         for (int i = 0; i < 3; i++) {
-            nextPosX = (frameWidth / 2) - ((invaderSize * 2) * SPAWN_COUNT_IN_FIRST_ROW) / 2;
+            nextPosX = (frameWidth / 2) - ((invaderSize * 2) * spawnCountInFirstRow) / 2;
             nextPosY += 2 * invaderSize;
             for (int j = 0; j < enemiesCountInRow; j++) {
                 if (j % 2 == 0) {
@@ -148,11 +155,14 @@ public class GamePanel extends JPanel implements GameConstants, Runnable {
         checkForInvaderCollisionsWithWall();
         checkForPlayerCollisionWithInvader();
         checkForWin();
+        checkForSettingsVisible();
         repaint();
     }
 
     private void moveAll() {
-
+        for (InvaderMissile missile : globalInvaderMissiles) {
+            missile.move();
+        }
         for (Missile missile : globalMissiles) {
             missile.move();
         }
@@ -166,6 +176,9 @@ public class GamePanel extends JPanel implements GameConstants, Runnable {
         for (Invader invader : globalInvaders) {
             invader.draw(g);
         }
+        for (InvaderMissile missile : globalInvaderMissiles) {
+            missile.draw(g);
+        }
         for (Missile missile : globalMissiles) {
             missile.draw(g);
         }
@@ -177,7 +190,7 @@ public class GamePanel extends JPanel implements GameConstants, Runnable {
                 JOptionPane.WARNING_MESSAGE, null, options, options[0]);
         if (returnCode == 0) {
             globalInvaders.clear();
-            globalEnemyMissiles.clear();
+            globalInvaderMissiles.clear();
             globalMissiles.clear();
             player = null;
             spawnPlayer();
@@ -192,6 +205,7 @@ public class GamePanel extends JPanel implements GameConstants, Runnable {
 
     @Override
     public void run() {
+        new ShootingHandler();
         int gameSpeed = GameVariables.gameSpeed;
         while (true) {
             update();

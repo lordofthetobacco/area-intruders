@@ -9,8 +9,9 @@ public class GameFrame extends JFrame implements GameConstants {
 
     private final StreamHandler streamHandler = new StreamHandler();
     private final SettingsFrame settingsWindow = new SettingsFrame();
-    private final ControlBar controlBar = new ControlBar();
     private final Score score = new Score(this);
+    private final Scoreboard scoreboard = new Scoreboard(score);
+    private final ControlBar controlBar = new ControlBar();
     private final GamePanel gamePanel = new GamePanel(this, controlBar, settingsWindow, score);
 
     GameFrame() {
@@ -45,6 +46,8 @@ public class GameFrame extends JFrame implements GameConstants {
         settingsButton.addActionListener(e -> {
             settingsWindow.toggleVisibility();
         });
+
+        rankButton.addActionListener(e -> scoreboard.toggleVisibility());
 
         JMenu gameMenu = new JMenu("Game");
         gameMenu.add(settingsButton);

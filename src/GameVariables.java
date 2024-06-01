@@ -21,8 +21,6 @@ public class GameVariables  {
                 return 128;
             case HARD:
                 return 256;
-            case INSANE:
-                return 128;
             default:
                 return 128;
         }
@@ -36,8 +34,6 @@ public class GameVariables  {
                 return 2;
             case HARD:
                 return 1;
-            case INSANE:
-                return 2;
             default:
                 return 2;
         }

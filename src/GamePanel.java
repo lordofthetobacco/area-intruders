@@ -71,6 +71,15 @@ public class GamePanel extends JPanel implements GameConstants, Runnable {
         }
     }
 
+    private void checkForPlayerCollisionWithHostileMissile() {
+        Iterator<InvaderMissile> missileIterator = globalInvaderMissiles.iterator();
+        while (missileIterator.hasNext()) {
+           if (player.intersects(missileIterator.next())) {
+                mainThread.interrupt();
+           } 
+        }
+    }
+
     private void checkIfInvaderShotDown() {
         Missile missile;
         Iterator<Invader> invaderIterator = globalInvaders.iterator();
@@ -150,6 +159,7 @@ public class GamePanel extends JPanel implements GameConstants, Runnable {
 
     private void update() {
         moveAll();
+        checkForPlayerCollisionWithHostileMissile();
         checkForPlayerCollisionsWithWalls();
         checkIfInvaderShotDown();
         checkForInvaderCollisionsWithWall();

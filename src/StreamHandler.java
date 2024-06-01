@@ -18,6 +18,7 @@ public class StreamHandler implements GameConstants {
     StreamHandler() {
         try {
             loadBackgroundsFromDirectory();
+            System.out.println(globalBackgrounds.size());
         } catch (IOException e) {
             new JOptionPane("No backgrounds found in path '(Game path)/assets/backgrounds'.");
         }

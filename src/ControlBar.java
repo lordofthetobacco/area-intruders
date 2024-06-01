@@ -2,16 +2,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
-public class ControlBar extends JToolBar implements Runnable, GameConstants{
+public class ControlBar extends JToolBar implements Runnable, GameConstants {
 
     JButton left = new JButton("<");
     JButton fire = new JButton("Fire");
     JButton right = new JButton(">");
+    Score scoreLabel = new Score();
 
-    private Player player;
-
-    ControlBar(Player player) {
-        this.player = player;
+    ControlBar() {
         left.setFocusable(false);
         right.setFocusable(false);
         fire.setFocusable(false);
@@ -21,6 +19,7 @@ public class ControlBar extends JToolBar implements Runnable, GameConstants{
         add(left);
         add(fire);
         add(right);
+        add(scoreLabel, BorderLayout.WEST);
         new Thread(this).start();
     }
 
@@ -32,7 +31,7 @@ public class ControlBar extends JToolBar implements Runnable, GameConstants{
             right.getModel().setPressed(true);
         }
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-            right.getModel().setPressed(true);
+            GameVariables.fire = true;
         }
     }
 
@@ -42,6 +41,9 @@ public class ControlBar extends JToolBar implements Runnable, GameConstants{
         }
         if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
             right.getModel().setPressed(false);
+        }
+        if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+            GameVariables.fire = false;
         }
     }
 
@@ -57,14 +59,7 @@ public class ControlBar extends JToolBar implements Runnable, GameConstants{
         if (!left.getModel().isPressed() && !right.getModel().isPressed()) {
             GameVariables.MOVEMENT_AMOUNT = 0;
         }
-
-        if (fire.getModel().isPressed()) {
-            if (missiles.isEmpty()) {
-                missiles.add(new Missile(player.x + PLAYER_WIDTH / 2 - GameConstants.MISSILE_WIDTH, player.y + PLAYER_HEIGHT));
-            }
-        }
     }
-
 
     @Override
     public void run() {
@@ -73,6 +68,7 @@ public class ControlBar extends JToolBar implements Runnable, GameConstants{
             try {
                 Thread.sleep(1000L / 128);
             } catch (InterruptedException e) {
+                break;
             }
         }
     }

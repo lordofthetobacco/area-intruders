@@ -1,38 +1,16 @@
 import java.awt.*;
 
-public class Missile extends Rectangle implements GameConstants, Runnable {
-    private boolean destroy = false;
-
+public class Missile extends Rectangle implements GameConstants {
     Missile(int x, int y) {
-        super(x,y, MISSILE_WIDTH, MISSILE_HEIGHT);
-        new Thread(this).start();
+        super(x, y, missileWidth, missileHeight);
     }
 
     public void draw(Graphics g) {
         g.setColor(Color.red);
-        g.fillRect(x, y, MISSILE_WIDTH, MISSILE_HEIGHT);
+        g.fillRect(x, y, missileWidth, missileHeight);
     }
 
-    public void travel() {
-        y -= MISSILE_SPEED;
-    }
-
-    void destroy() {
-        destroy = true;
-    }
-
-    @Override
-    public void run() {
-        while (true) {
-            if (destroy) {
-                Thread.currentThread().interrupt();
-            }
-            travel();
-            try {
-                Thread.sleep(1000L / 128);
-            } catch (InterruptedException e) {
-                break;
-            }
-        }
+    public void move() {
+        y -= missileSpeed;
     }
 }

@@ -1,7 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
 
-
 public class SettingsFrame extends JFrame implements GameConstants {
 
     private final SettingsPanel settingsPanel = new SettingsPanel();
@@ -12,11 +11,10 @@ public class SettingsFrame extends JFrame implements GameConstants {
         setSize(new Dimension(450, 500));
         setResizable(false);
         add(settingsPanel);
-        saveButton.addActionListener(_ -> {
+        saveButton.addActionListener(e -> {
             GameVariables.DIFFICULTY = settingsPanel.getNewDifficulty();
             GameVariables.CURRENT_BACKGROUND_MODEL_INDEX = settingsPanel.getNewBackgroundModelIndex();
-            GameVariables.CURRENT_PLAYER_MODEL_INDEX = settingsPanel.getNewPlayerModelIndex();
-            GameVariables.CURRENT_INVADER_MODEL_INDEX = settingsPanel.getNewInvaderModelIndex();
+            GameVariables.FANCY_PLAYER = settingsPanel.getNewPlayerModelSetting();
             toggleVisibility();
         });
         add(saveButton, BorderLayout.SOUTH);
@@ -26,40 +24,38 @@ public class SettingsFrame extends JFrame implements GameConstants {
         setVisible(!isVisible());
     }
 
-    private class SettingsPanel extends JPanel{
+    private class SettingsPanel extends JPanel {
 
-        JComboBox<Difficulty> difficultySelector = new JComboBox<>(Difficulty.values());
-        JComboBox<String> backgroundSelector = new JComboBox<>();
-        JComboBox<String> playerSelector = new JComboBox<>();
-        JComboBox<String> invaderSelector = new JComboBox<>();
+        private JComboBox<Difficulty> difficultySelector = new JComboBox<>(Difficulty.values());
+        private JComboBox<String> backgroundSelector = new JComboBox<>();
+        private JCheckBox playerSwitch = new JCheckBox();
 
         SettingsPanel() {
-            setLayout(new GridLayout(4,2, 0,5));
-            setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+            setLayout(new GridLayout(3, 2, 0, 5));
+            setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
             init();
         }
 
         private void init() {
-            add(new JLabel("Difficulty")); add(difficultySelector);
-            add(new JLabel("Invader")); add(backgroundSelector);
-            add(new JLabel("Player")); add(playerSelector);
-            add(new JLabel("Background")); add(invaderSelector);
+            add(new JLabel("Difficulty"));
+            add(difficultySelector);
+            playerSwitch.setSelected(!GameVariables.FANCY_PLAYER);
+            add(new JLabel("Simple player model"));
+            add(playerSwitch);
+            add(new JLabel("Background"));
+            add(backgroundSelector);
         }
 
         public Difficulty getNewDifficulty() {
             return (Difficulty) difficultySelector.getSelectedItem();
         }
 
-        public int getNewInvaderModelIndex() {
-            return invaderSelector.getSelectedIndex();
-        }
-
-        public int getNewPlayerModelIndex() {
-            return playerSelector.getSelectedIndex();
-        }
-
         public int getNewBackgroundModelIndex() {
             return backgroundSelector.getSelectedIndex();
+        }
+
+        public boolean getNewPlayerModelSetting() {
+            return playerSwitch.getModel().isSelected();
         }
     }
 }

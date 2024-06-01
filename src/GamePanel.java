@@ -1,78 +1,206 @@
-import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.nio.file.Paths;
-public class GamePanel extends JPanel implements GameConstants, Runnable{
+import java.util.Comparator;
+import java.util.Iterator;
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import javax.swing.JOptionPane;
 
-    Player player;
-    Image background;
-    Graphics bgGraphics;
+public class GamePanel extends JPanel implements GameConstants, Runnable {
 
-    GamePanel() {
+    private Thread mainThread = new Thread(this);
+    private JFrame windowReference;
+    private Player player;
+    private Image background;
+    private Graphics bgGraphics;
+    private int enemiesCountInRow = SPAWN_COUNT_IN_FIRST_ROW;
+
+    private Invader firstInvader;
+    private Invader lastInvader;
+
+    GamePanel(JFrame windowReference) {
+        this.windowReference = windowReference;
         setFocusable(true);
-        setBackground(new Color(0,0,0));
+        newGame();
+    }
+
+    public void pauseGame() {
+        try {
+            mainThread.wait();
+        } catch (InterruptedException e) {
+            return;
+        }
+    }
+
+    public void resumeGame() {
+        try {
+            mainThread.notify();
+        } catch (Exception e) {
+            return;
+        }
+    }
+
+    public void newGame() {
         spawnPlayer();
-        new Thread(this).start();
+        newEnemies();
+        mainThread.start();
     }
 
     private void spawnPlayer() {
-        player = new Player((FRAME_WIDTH / 2 ) - PLAYER_WIDTH,FRAME_HEIGHT - PLAYER_HEIGHT - TOOLBAR_HEIGHT - MENUBAR_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT);
+        player = new Player(
+                (frameWidth / 2) - playerWidth, frameHeight - playerHeight - TOOLBAR_HEIGHT - MENUBAR_HEIGHT,
+                playerWidth, playerHeight);
     }
-
-    public Player getPlayer() {
-        return player;
-    }
-
+    
     public void paint(Graphics g) {
         try {
-            background = ImageIO.read(Paths.get("assets", "bg1.jpg").toFile());
+            background = ImageIO.read(Paths.get("assets", "backgrounds", "bg1.jpg").toFile());
         } catch (IOException e) {
             background = createImage(getWidth(), getHeight());
         }
         bgGraphics = background.getGraphics();
         draw(bgGraphics);
-        g.drawImage(background,0,0,this);
+        g.drawImage(background, 0, 0, this);
     }
 
-    public void checkForCollisions() {
-        missiles.removeIf(missile -> {
-            if (missile.y == 0) {
-                missile.destroy();
-                return true;
-            }
-            return false;
-        });
-
+    private void checkForPlayerCollisionsWithWalls() {
         if (player.x <= 0) {
             player.x = 0;
         }
-        if (player.x >= FRAME_WIDTH - PLAYER_WIDTH) {
-            player.x = FRAME_WIDTH - PLAYER_WIDTH;
+        if (player.x >= frameWidth - playerWidth * 2) {
+            player.x = frameWidth - playerWidth * 2;
         }
     }
 
-    public void update() {
-        checkForCollisions();
+    private void checkIfInvaderShotDown() {
+        Missile missile;
+        Iterator<Invader> invaderIterator = globalInvaders.iterator();
+        Iterator<Missile> missileIterator = globalMissiles.iterator();
+        while (missileIterator.hasNext()) {
+            missile = missileIterator.next();
+            if (!(missile.y <= 0)) {
+                while (invaderIterator.hasNext()) {
+                    if (missile.intersects(invaderIterator.next())) {
+                        missileIterator.remove();
+                        invaderIterator.remove();
+                        Score.addPoints();
+                        if (globalInvaders.size() > 1) {
+                            lastInvader = globalInvaders.stream().max(Comparator.comparingDouble(Invader::getX)).get();
+                            firstInvader = globalInvaders.stream().min(Comparator.comparingDouble(Invader::getX)).get();
+                        }
+                    }
+                }
+            } else {
+                missileIterator.remove();
+            }
+        }
+    }
+
+    private void checkForInvaderCollisionsWithWall() {
+        for (Invader invader : globalInvaders) {
+            if (lastInvader.x == (frameWidth - invaderSize) || firstInvader.x == 0) {
+                invader.invertX();
+                invader.y += invaderSize;
+            }
+        }
+    }
+
+    private void checkForPlayerCollisionWithInvader() {
+        Iterator<Invader> invaderIterator = globalInvaders.iterator();
+        while (invaderIterator.hasNext()) {
+            if (player.intersects(invaderIterator.next())) {
+                mainThread.interrupt();
+            }
+        }
+    }
+
+    private void newEnemies() {
+        int nextPosX;
+        int nextPosY = 0;
+        for (int i = 0; i < 3; i++) {
+            nextPosX = (frameWidth / 2) - ((invaderSize * 2) * SPAWN_COUNT_IN_FIRST_ROW) / 2;
+            nextPosY += 2 * invaderSize;
+            for (int j = 0; j < enemiesCountInRow; j++) {
+                if (j % 2 == 0) {
+                    globalInvaders.add(new Invader(nextPosX + invaderSize / 2, nextPosY, invaderSize, invaderSize));
+                } else {
+                    globalInvaders.add(new Invader(nextPosX, nextPosY, invaderSize, invaderSize));
+                }
+                nextPosX = nextPosX + invaderSize * 2;
+            }
+        }
+        firstInvader = globalInvaders.stream().min(Comparator.comparingDouble(Invader::getX)).get();
+        lastInvader = globalInvaders.stream().max(Comparator.comparingDouble(Invader::getX)).get();
+    }
+
+    private void checkForWin() {
+        if (globalInvaders.isEmpty()) {
+            new JOptionPane().showMessageDialog(this, "You win!");
+            windowReference.dispose();  
+        }
+    }
+
+    private void update() {
+        moveAll();
+        checkForPlayerCollisionsWithWalls();
+        checkIfInvaderShotDown();
+        checkForInvaderCollisionsWithWall();
+        checkForPlayerCollisionWithInvader();
+        checkForWin();
         repaint();
+    }
+
+    private void moveAll() {
+
+        for (Missile missile : globalMissiles) {
+            missile.move();
+        }
+        for (Invader invader : globalInvaders) {
+            invader.move();
+        }
     }
 
     public void draw(Graphics g) {
         player.draw(g);
-
-        for (Missile missile : missiles) {
+        for (Invader invader : globalInvaders) {
+            invader.draw(g);
+        }
+        for (Missile missile : globalMissiles) {
             missile.draw(g);
+        }
+    }
+
+    private void gameOver() {
+        String[] options = new String[] { "Restart", "Exit" };
+        int returnCode = JOptionPane.showOptionDialog(this, "Game Over", "Game has ended", JOptionPane.DEFAULT_OPTION,
+                JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+        if (returnCode == 0) {
+            globalInvaders.clear();
+            globalEnemyMissiles.clear();
+            globalMissiles.clear();
+            player = null;
+            spawnPlayer();
+            newEnemies();
+            mainThread = new Thread(this);
+            mainThread.start();
+        }
+        if (returnCode == 1) {
+            windowReference.dispose();
         }
     }
 
     @Override
     public void run() {
-        while(true) {
-                update();
-            try{
-                Thread.sleep(1000L / 128);
+        int gameSpeed = GameVariables.gameSpeed;
+        while (true) {
+            update();
+            try {
+                Thread.sleep(1000L / gameSpeed);
             } catch (InterruptedException e) {
-                return;
+                gameOver();
+                repaint();
+                break;
             }
         }
     }

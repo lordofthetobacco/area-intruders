@@ -1,31 +1,34 @@
+import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public interface GameConstants {
-//    Game Constants
-    int FRAME_HEIGHT = 720;
-    int FRAME_WIDTH = (int)(FRAME_HEIGHT * 1.777f);
-    int GAME_OBJECT_SIZE = 40;
-    int SPAWN_COUNT_IN_FIRST_COLUMN = 10;
+    // Game Constants
+    int frameHeight = 720;
+    int frameWidth = (int) (frameHeight * 1.777f);
+    int SPAWN_COUNT_IN_FIRST_ROW = 10;
     int TOOLBAR_HEIGHT = 35;
     int MENUBAR_HEIGHT = 35;
 
-//    Player Settings
-    int PLAYER_WIDTH = 40;
-    int PLAYER_HEIGHT = (int)(PLAYER_WIDTH * 1.777f);
+    // Player Settings
+    int playerWidth = 40;
+    int playerHeight = (int) (playerWidth * 1.777f);
 
+    // Missile Settings
+    int missileHeight = 20;
+    int missileWidth = 8;
+    int missileSpeed = 3;
 
-//    Missile Settings
-    int MISSILE_HEIGHT = 20;
-    int MISSILE_WIDTH = 8;
-    int MISSILE_SPEED = 3;
+    // Invader Settings
+    int invaderSize = 24;
+    int invaderSpeed = 1;
 
-//    Invader Settings
-    int INVADER_SIZE = 24;
-    int INVADER_SPEED = 1;
+    // Object Arrays
+    ArrayList<Missile> globalMissiles = new ArrayList<>();
+    ArrayList<InvaderMissile> globalEnemyMissiles = new ArrayList<>();
+    ArrayList<Image> globalBackgrounds = new ArrayList<>();
+    ArrayList<Invader> globalInvaders = new ArrayList<>();
 
-
-//    Object Arrays
-    ArrayList<Missile> missiles = new ArrayList<>();
-    ArrayList<Invader> invaders = new ArrayList<>();
+    // Score Elements
+    HashMap<String, Integer> globalScores = new HashMap<>();
 }
-

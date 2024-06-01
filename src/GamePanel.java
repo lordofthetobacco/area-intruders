@@ -18,6 +18,7 @@ public class GamePanel extends JPanel implements GameConstants, Runnable {
     private ControlBar controlBarReference;
     private SettingsFrame settingsFrameReference;
     private Score scoreReference;
+    private Scoreboard scoreboardReference;
     
     private Player player;
     private Image background;
@@ -27,8 +28,9 @@ public class GamePanel extends JPanel implements GameConstants, Runnable {
     private Invader firstInvader;
     private Invader lastInvader;
 
-    GamePanel(JFrame windowRef, ControlBar controlBarRef, SettingsFrame settingsFrameRef, Score scoreRef) {
+    GamePanel(JFrame windowRef, ControlBar controlBarRef, SettingsFrame settingsFrameRef, Score scoreRef, Scoreboard scoreboardRef) {
         this.windowReference = windowRef;
+        this.settingsFrameReference = settingsFrameRef;
         this.controlBarReference = controlBarRef;
         this.settingsFrameReference = settingsFrameRef;
         this.scoreReference = scoreRef;

@@ -12,7 +12,7 @@ public class GameFrame extends JFrame implements GameConstants {
     private final Score score = new Score(this);
     private final Scoreboard scoreboard = new Scoreboard(score);
     private final ControlBar controlBar = new ControlBar();
-    private final GamePanel gamePanel = new GamePanel(this, controlBar, settingsWindow, score);
+    private final GamePanel gamePanel = new GamePanel(this, controlBar, settingsWindow, score, scoreboard);
 
     GameFrame() {
 
